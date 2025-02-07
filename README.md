@@ -115,9 +115,15 @@ The project received positive feedback from the reviewer, highlighting key achie
 **Educational Context**  
 This project was completed as part of the [AWS AI/ML Scholarship Program](https://www.udacity.com/scholarships/aws-ai-ml-scholarship-program) Nanodegree through Udacity. The project requirements, starter code, and learning framework were provided by Udacity and AWS.
 
-**Code Licensing**  
-Original project infrastructure and specifications are Udacity/AWS intellectual property.  
-Code written by the student contributor (implementation details in `lambda.py`, workflow configurations, and monitoring logic) is made available under the **[Apache License 2.0](LICENSE)** to align with AWS sample code practices.
+**Intellectual Property**  
+- Project specifications and requirements are **Udacity/AWS intellectual property**.  
+- Student implementations in [`starter.ipynb`](/starter.ipynb), [`lambda.py`](/lambda.py), and workflow configurations are shared for **portfolio demonstration purposes only**. 
+
+**Usage Rights**  
+As per scholarship guidelines:
+- You may showcase this work in portfolios/job applications
+- Commercial use requires written permission from Udacity/AWS
+- Udacity/AWS retain all rights to project structure and evaluation criteria
 
 **Gratitude**  
 Special thanks to:
