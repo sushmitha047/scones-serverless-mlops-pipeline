@@ -1,100 +1,60 @@
-# Image Classification with AWS SageMaker for Scones Unlimited
+# Image Classification with AWS SageMaker for Vehicle Type Identification
 
-This repository contains the solution for the AWS AI/ML Scholarship Program Nanodegree project, "AWS Machine Learning Fundamentals". In this project, an image classification model was built to identify vehicle types (bicycles and motorcycles) for a scone-delivery-focused logistics company, Scones Unlimited. The project demonstrates designing, training, deploying, and monitoring an ML model using AWS SageMaker along with AWS Lambda functions and AWS Step Functions to compose a full ML-enabled workflow.
-
---------------------------------------------------
-
-## Table of Contents
-
-- [Project Introduction](#project-introduction)
-- [Project Overview](#project-overview)
-- [Architecture and Workflow](#architecture-and-workflow)
-- [Project Steps](#project-steps)
-- [Review Highlights](#review-highlights)
-- [License & Acknowledgments](#license--acknowledgments)
-
---------------------------------------------------
-
-## Project Introduction
-### Background
-Image classification is a critical computer vision task with applications spanning autonomous vehicles, augmented reality, eCommerce, and even diagnostic medicine. For this project, Scones Unlimited, a scone-delivery-focused logistics company, leverages image classification to optimize its operations by routing delivery drivers based on their vehicle type.  
- 
-By building an image classification model capable of distinguishing between bicycles and motorcycles, the company can efficiently allocate orders: nearby orders for bicycle couriers and farther routes for motorcyclists. This not only improves operational efficiency but also reduces the chance of misrouting and delays.
-
-### Project Goals
-- Develop an end-to-end machine learning workflow.
-- Train and deploy a scalable image classification model using AWS SageMaker.
-- Integrate AWS Lambda functions and AWS Step Functions to create an event-driven application.
-- Enable continuous monitoring using SageMaker Model Monitor with DataCaptureConfig.
-- Provide a robust, production-ready demo that showcases the integration of ML and AWS services.
-
---------------------------------------------------
+An end-to-end machine learning workflow that identifies bicycles and motorcycles for Scones Unlimited's delivery operations using AWS SageMaker, Lambda functions, and Step Functions.
 
 ## Project Overview
-The repository includes code and scripts for:
-- Data extraction and transformation (ETL) along with staging data to Amazon S3.
-- Training an image classification model on SageMaker.
-- Deploying the trained model on a SageMaker endpoint and configuring DataCapture for ongoing monitoring.
-- Creating three individual AWS Lambda functions to:
-  1. Prepare and return image data.
-  2. Invoke the image classification endpoint.
-  3. Filter out low-confidence predictions.
-- Orchestrating the Lambda functions using AWS Step Functions to build a full machine learning workflow.
-- Testing and evaluating the model’s performance and visualizing output from the Model Monitor.
 
-### File Structure
-#### Key Files:
+This project demonstrates how to build, deploy, and monitor an image classification model that distinguishes between bicycles and motorcycles to optimize delivery routing. By correctly identifying vehicle types, Scones Unlimited can efficiently allocate orders: nearby deliveries to bicycle couriers and farther routes to motorcyclists.
+
+### Key Technologies
+- AWS SageMaker
+- AWS Lambda
+- AWS Step Functions
+- SageMaker Model Monitor
+
+## Key Components
+
+### Model Training and Deployment
+- CNN-based image classification using SageMaker's built-in algorithm
+- Trained on bicycle and motorcycle images from CIFAR-100 dataset
+- 81% validation accuracy over 30 epochs
+- Deployed to SageMaker endpoint with monitoring enabled
+- Training: `ml.p3.2xlarge`, Deployment: `ml.m5.xlarge`
+
+### Data Preparation
+- Extracted relevant images from CIFAR-100
+- Transformed 3073 unsigned integers per image into 32x32x3 RGB arrays
+- Saved as PNG files with TSV metadata
+- Uploaded to S3 for training
+
+### Serverless Workflow
+Three Lambda functions in a Step Functions workflow:
+1. **Data Generation**: S3 image retrieval and preparation
+2. **Image Classification**: SageMaker endpoint invocation
+3. **Confidence Filter**: 75% threshold validation
+
+## Implementation Details
+
+### Model Configuration
+SageMaker estimator configured with SageMaker's built-in algorithm image URI, instance type, and output path. Proper IAM role and SageMaker session specified.
+
+### Monitoring Setup
+DataCaptureConfig set to capture 100% of requests/responses, storing data in S3 for analysis.
+
+## Results and Evaluation
+
+The model successfully:
+- Distinguishes vehicles with high confidence
+- Routes low-confidence predictions for review
+- Provides ongoing performance insights
+- Maintains 75% production confidence threshold
+
+## Repository Structure
+
+- `starter.ipynb`: Main notebook for data preparation, model training, and monitoring
+- `lambda.py`: Lambda function handlers
 - `images/`: Contains workflow visualization and execution result screenshots
 - `workflows/`: Step Function state machine definition (ASL JSON)
-- `lambda.py`: Contains three Lambda handlers:
-  1. **Data Generation**: Fetches images from S3
-  2. **Image Classification**: Invokes SageMaker endpoint
-  3. **Confidence Filter**: Validates prediction confidence
-- `starter.ipynb`: Main notebook for data prep, model training, and monitoring
-
---------------------------------------------------
-
-## Architecture and Workflow / Project Steps
-
-This project follows a structured workflow to build, deploy, and monitor an image classification model for Scones Unlimited. Below are the key stages of the workflow:
-
-### Step 1: Data Staging
-
-- Retrieve the dataset from the provided URL.
-- Transform the images to align with model requirements.
-- Upload the processed images to an Amazon S3 bucket for training.
-
-### Step 2: Model Training and Deployment
-
-- Configure and initialize the **image-classification** estimator using SageMaker with the appropriate instance type (`ml.p3.2xlarge`).
-- Train the model on the provided dataset, achieving a validation accuracy of **81% over 30 epochs**.
-- Deploy the trained model to a SageMaker endpoint.
-- Configure DataCaptureConfig for continuous monitoring of inference data using SageMaker Model Monitor.
-
-### Step 3: Lambda Functions and Step Function Workflow
-
-- Design three Lambda functions to handle:
-  1. **Data Preparation**: Fetch image data from S3 and preprocess it.
-  2. **Model Inference**: Invoke the deployed SageMaker endpoint for predictions.
-  3. **Confidence Filtering**: Validate predictions based on a predefined confidence threshold.
-- Integrate these Lambda functions into an event-driven workflow using **AWS Step Functions**, ensuring modularity and scalability.
-
-### Step 4: Testing and Evaluation
-
-- Test the entire workflow by running sample images through the system to verify functionality.
-- Validate predictions generated by the SageMaker endpoint.
-- Analyze captured inference data using custom visualizations to monitor model performance.
-
-### Step 5: Cleanup Cloud Resources
-
-- Follow cleanup procedures to delete **AWS resources** (e.g., S3 buckets, SageMaker endpoints, Step Functions) and avoid unwanted costs.
-
----
-
-The workflow supports **continuous monitoring** using SageMaker Model Monitor to ensure the model performs reliably in a production environment and provides modular components for debugging and scalability.
-
-
---------------------------------------------------
 
 ## Review Highlights
 
@@ -107,8 +67,6 @@ The project received positive feedback from the reviewer, highlighting key achie
 - Implemented modular AWS Lambda functions combined with AWS Step Functions for an efficient, decoupled architecture.
 - Demonstrated attention to detail by correctly identifying class labels for bicycles and motorcycles and successfully staging data on S3.
 - Delivered custom visualizations for monitoring model performance, ensuring ongoing insights into production quality.
-
---------------------------------------------------
 
 ## License & Acknowledgments
 
@@ -130,5 +88,3 @@ Special thanks to:
 - 🚀 **AWS AI/ML Scholarship Program** for providing platform access and cloud resources
 - 🧑💻 **Udacity Reviewers** for detailed feedback and guidance
 - 🌐 **AWS Community** for documentation, forums, and technical support
-
---------------------------------------------------
